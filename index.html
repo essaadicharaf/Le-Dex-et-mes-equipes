@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mon Dex connecté — Digimon</title>
+    <link rel="stylesheet" href="./dist/output.css" />
+  </head>
+  <body class="bg-ground font-body text-ink min-h-screen antialiased">
+    <header class="bg-[#38686A] border-b border-line text-white fixed top-0 z-40 w-full">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 sm:px-8 py-4 ms:mb-5">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand text-white shadow-md">
+            <svg
+              aria-hidden="true"
+              class="h-6 w-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M3 12h18"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </div>
+          <div>
+            <p class="font-display text-2xl font-extrabold leading-none tracking-tight">Mon Dex</p>
+            <p class="text-xs sm:text-sm text-white">Digimon · <span id="creature-count">0</span> créatures</p>
+          </div>
+        </div>
+        <nav
+          aria-label="Navigation principale"
+          class="flex sm:flex-wrap sm:justify-end items-center gap-2 overflow-x-auto pb-1 max-w-full scrollbar-none text-xs sm:text-sm sm:"
+        >
+          <a
+            href="#grid"
+            class="rounded-full bg-[#38686A] px-3.5 ms:px-1 py-1.5 border-2 border-solid border-brand ms:py-0.5 shrink-0 text-white hover:bg-line transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
+            >Créatures</a
+          >
+          <a
+            href="#team"
+            class="rounded-full bg-[#38686A] px-3.5 py-1.5 shrink-0 border-2 border-solid border-brand text-white hover:bg-line transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
+            >Mon équipe · <span id="team-count">0</span>/6</a
+          >
+          <a
+            href="#create"
+            class="rounded-2xl bg-brand px-3.5 py-[10px] shrink-0 text-center font-bold text-white hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-brand"
+            >+ Nouvelle créature</a
+          >
+        </nav>
+      </div>
+    </header>
+    <main class="mx-auto sm:mt-[50px] flex max-w-7xl flex-col gap-8 px-4 sm:px-8 py-8">
+      <section aria-label="Recherche et filtres" class="flex flex-col gap-6">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <h1 class="font-display text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">Trouver un Digimon</h1>
+          <form id="search-form" class="flex w-full md:max-w-lg flex-wrap items-end gap-2">
+            <label class="flex flex-1 min-w-[200px] flex-col gap-1.5 text-xs sm:text-sm font-bold text-ink">
+              Rechercher par nom
+              <input
+                id="search"
+                type="search"
+                placeholder="ex. Agumon"
+                class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
+              />
+            </label>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="submit" class="btn-primary px-4 py-2.5 text-xs sm:text-sm font-bold">Rechercher</button>
+              <button
+                type="button"
+                id="btn-clear-search"
+                class="btn-outline px-4 py-2.5 text-xs sm:text-sm font-semibold"
+              >
+                Effacer
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div id="filters" role="group" aria-label="Filtrer par attribut" class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            data-type="all"
+            class="chip bg-brand border-brand text-white shrink-0 transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
+          >
+            Tous
+          </button>
+          <button
+            type="button"
+            data-type="Vaccine"
+            class="chip shrink-0 transition-colors hover:border-attribute-vaccine hover:bg-attribute-vaccine hover:text-white focus:outline-none focus:ring-2 focus:ring-attribute-vaccine"
+          >
+            Vaccine
+          </button>
+          <button
+            type="button"
+            data-type="Data"
+            class="chip shrink-0 transition-colors hover:border-attribute-data hover:bg-attribute-data hover:text-white focus:outline-none focus:ring-2 focus:ring-attribute-data"
+          >
+            Data
+          </button>
+          <button
+            type="button"
+            data-type="Virus"
+            class="chip shrink-0 transition-colors hover:border-attribute-virus hover:bg-attribute-virus hover:text-white focus:outline-none focus:ring-2 focus:ring-attribute-virus"
+          >
+            Virus
+          </button>
+          <button
+            type="button"
+            data-type="Free"
+            class="chip shrink-0 transition-colors hover:border-attribute-free hover:bg-attribute-free hover:text-white focus:outline-none focus:ring-2 focus:ring-attribute-free"
+          >
+            Free
+          </button>
+          <button
+            type="button"
+            data-type="favorites"
+            class="chip shrink-0 inline-flex items-center gap-1.5 transition-colors hover:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400"
+          >
+            <svg
+              class="w-3.5 h-3.5"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              />
+            </svg>
+            <span>Favoris</span>
+          </button>
+        </div>
+      </section>
+      <div class="flex flex-col lg:flex-row gap-8 items-start w-full">
+        <div class="flex flex-col w-full min-w-0 flex-1">
+          <section
+            id="grid"
+            aria-label="Créatures"
+            class="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+          ></section>
+          <!-- add btn load more  -->
+          <div class="flex justify-center pt-8 pb-4">
+            <button
+              id="load-more-btn"
+              type="button"
+              class="btn-primary flex items-center justify-center gap-2 px-8 py-3 font-bold border"
+            >
+              Charger plus
+            </button>
+          </div>
+        </div>
+        <aside class="flex w-full lg:w-[420px] shrink-0 flex-col gap-6 rounded-xl">
+          <!-- PANNEAU DE DÉTAIL -->
+          <section
+            id="detail"
+            aria-label="Détail de la créature"
+            class="flex flex-col items-center justify-center text-center gap-4 rounded-xl border-2 border-dashed border-line bg-surface p-8 min-h-[360px] shadow-sm"
+          >
+            <div class="w-16 h-16 rounded-full bg-brand-light flex items-center justify-center text-brand">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-display text-base font-bold text-ink">Aucun Digimon sélectionné</h3>
+              <p class="text-xs text-muted m-1 max-w-[220px]">
+                Cliquez sur une carte de la grille pour afficher ses détails et ses statistiques.
+              </p>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
+    <footer class="mx-auto text-center max-w-7xl px-4 sm:px-8 pb-10 text-xs text-muted">ESSAADI CHARAF EDDINE</footer>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
