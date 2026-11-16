@@ -1,0 +1,112 @@
+{
+  "creatures": [
+    {
+      "id": 1,
+      "name": "Agumon",
+      "type": "Vaccine",
+      "level": "Rookie",
+      "stats": { "attack": 115, "defence": 80, "speed": 95 },
+      "image": "https://digimon.shadowsmith.com/img/agumon.jpg",
+      "description": "Un Digimon reptile bipède capable de cracher des boules de feu dévastatrices sur ses ennemis."
+    },
+    {
+      "id": 2,
+      "name": "Gabumon",
+      "type": "Data",
+      "level": "Rookie",
+      "stats": { "attack": 105, "defence": 100, "speed": 90 },
+      "image": "https://digimon.shadowsmith.com/img/gabumon.jpg",
+      "description": "Porte une fourrure pour cacher sa timidité. Il utilise des attaques de glace redoutables."
+    },
+    {
+      "id": 3,
+      "name": "Guilmon",
+      "type": "Virus",
+      "level": "Rookie",
+      "stats": { "attack": 130, "defence": 80, "speed": 100 },
+      "image": "https://digi-api.com/images/digimon/w/Armadimon.png",
+      "description": "Un jeune dragon de type Virus, très joueur mais doté d'une férocité cachée au combat."
+    },
+    {
+      "id": 4,
+      "name": "Patamon",
+      "type": "Data",
+      "level": "Rookie",
+      "stats": { "attack": 90, "defence": 85, "speed": 105 },
+      "image": "https://digimon.shadowsmith.com/img/patamon.jpg",
+      "description": "Un petit mammifère volant grâce à ses grandes oreilles. Il projette des bulles d'air comprimé."
+    },
+    {
+      "id": 5,
+      "name": "Greymon",
+      "type": "Vaccine",
+      "level": "Champion",
+      "stats": { "attack": 170, "defence": 140, "speed": 125 },
+      "image": "https://digimon.shadowsmith.com/img/greymon.jpg",
+      "description": "L'évolution d'Agumon avec un crâne blindé renforcé et une puissance de feu décuplée."
+    },
+    {
+      "id": 6,
+      "name": "Garurumon",
+      "type": "Vaccine",
+      "level": "Champion",
+      "stats": { "attack": 160, "defence": 135, "speed": 155 },
+      "image": "https://digimon.shadowsmith.com/img/garurumon.jpg",
+      "description": "Un grand loup recouvert d'une fourrure très dure et qui crache des flammes de glace bleue."
+    },
+    {
+      "id": 7,
+      "name": "Angemon",
+      "type": "Vaccine",
+      "level": "Champion",
+      "stats": { "attack": 180, "defence": 145, "speed": 135 },
+      "image": "https://digimon.shadowsmith.com/img/angemon.jpg",
+      "description": "Un ange ailé porteur de lumière divine, impitoyable contre les forces maléfiques."
+    },
+    {
+      "id": 8,
+      "name": "Devimon",
+      "type": "Virus",
+      "level": "Champion",
+      "stats": { "attack": 175, "defence": 125, "speed": 140 },
+      "image": "https://digimon.shadowsmith.com/img/devimon.jpg",
+      "description": "Un ange déchu aux ailes déchirées, capable de manipuler les cœurs et les ombres."
+    },
+    {
+      "id": 9,
+      "name": "MetalGreymon",
+      "type": "Vaccine",
+      "level": "Ultimate",
+      "stats": { "attack": 215, "defence": 195, "speed": 160 },
+      "image": "https://digimon.shadowsmith.com/img/metalgreymon.jpg",
+      "description": "Un cyborg redoutable armé d'un bras mécanique et de missiles tirés depuis sa poitrine."
+    },
+    {
+      "id": 10,
+      "name": "WereGarurumon",
+      "type": "Vaccine",
+      "level": "Ultimate",
+      "stats": { "attack": 205, "defence": 180, "speed": 210 },
+      "image": "https://digimon.shadowsmith.com/img/weregarurumon.jpg",
+      "description": "Un loup bipède expert en arts martiaux, réputé pour la précision et la force de ses coups de pied."
+    },
+    {
+      "id": 11,
+      "name": "Myotismon",
+      "type": "Virus",
+      "level": "Ultimate",
+      "stats": { "attack": 210, "defence": 190, "speed": 180 },
+      "image": "https://digimon.shadowsmith.com/img/myotismon.jpg",
+      "description": "Le maître des ténèbres et roi des vampires, utilisant des nuées de chauves-souris noires."
+    },
+    {
+      "id": 12,
+      "name": "WarGreymon",
+      "type": "Vaccine",
+      "level": "Mega",
+      "stats": { "attack": 245, "defence": 225, "speed": 220 },
+      "image": "https://digimon.shadowsmith.com/img/wargreymon.jpg",
+      "description": "Le guerrier ultime dragon vêtu d'une armure en métal Chrondigizoit, doté des griffes tueuses de dragons."
+    }
+  ]
+}
