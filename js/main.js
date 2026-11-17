@@ -3,6 +3,8 @@ import { renderGrid, renderGridError, renderGridLoading, updateCounter } from ".
 const grid = document.querySelector("#grid");
 const allBtnFilters = document.querySelectorAll("#filters button");
 let currentFilter = "all";
+const searchInput = document.getElementById("search");
+
 const loadCreatures = async () => {
   renderGridLoading();
   try {
@@ -14,6 +16,21 @@ const loadCreatures = async () => {
     renderGridError();
   }
 };
+
+const search = async () => {
+  const searchClean = searchInput ? searchInput.value.trim().toLowerCase() : "";
+  const creatures = await getCreatures();
+  const searching = creatures.filter((creature) => {
+    const matchName = creature.name.toLowerCase().includes(searchClean);
+
+    return matchName;
+  });
+
+  renderGrid(searching);
+};
+if (searchInput) {
+  searchInput.addEventListener("input", search);
+}
 allBtnFilters.forEach((btn) => {
   btn.addEventListener("click", () => {
     allBtnFilters.forEach((b) => b.classList.remove("bg-brand", "border-brand", "text-white"));
