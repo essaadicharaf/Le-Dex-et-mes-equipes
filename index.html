@@ -168,6 +168,172 @@
           </section>
         </aside>
       </div>
+      <!-- ===================== FORMULAIRE D'AJOUT ===================== -->
+      <section
+        id="create"
+        aria-label="Nouvelle créature"
+        class="flex flex-col gap-6 rounded-xl bg-surface p-6 sm:p-8 border border-line shadow-sm"
+      >
+        <div>
+          <h2 id="form-title" class="font-display text-2xl sm:text-3xl font-extrabold text-ink">Nouveau Digimon</h2>
+          <p class="text-muted text-xs sm:text-sm">
+            Chaque champ est vérifié avant l'envoi vers l'API. Votre brouillon est sauvegardé automatiquement.
+          </p>
+        </div>
+
+        <form id="creature-form" novalidate class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+          <!-- Nom -->
+          <label for="input-name" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
+            Nom *
+            <input
+              id="input-name"
+              name="name"
+              type="text"
+              placeholder="ex. Patamon"
+              class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
+            />
+            <span data-error="name" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
+          </label>
+
+          <!-- Attribut (Type) -->
+          <label for="input-type" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
+            Attribut *
+            <select
+              id="input-type"
+              name="type"
+              class="field font-normal text-ink border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
+            >
+              <option value="">Choisir un attribut</option>
+              <option value="Vaccine">Vaccine</option>
+              <option value="Data">Data</option>
+              <option value="Virus">Virus</option>
+              <option value="Free">Free</option>
+            </select>
+            <span data-error="type" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
+          </label>
+
+          <!-- Niveau -->
+          <label for="input-level" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
+            Niveau *
+            <select
+              id="input-level"
+              name="level"
+              class="field font-normal text-ink border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
+            >
+              <option value="">Choisir un niveau</option>
+              <option value="Rookie">Rookie</option>
+              <option value="Champion">Champion</option>
+              <option value="Ultimate">Ultimate</option>
+              <option value="Mega">Mega</option>
+            </select>
+            <span data-error="level" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
+          </label>
+
+          <!-- Lien de l'image -->
+          <label for="input-image" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
+            Lien de l'image *
+            <input
+              id="input-image"
+              name="image"
+              type="url"
+              placeholder="https://…/image.jpg"
+              class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
+            />
+            <span data-error="image" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
+          </label>
+
+          <!-- Statistiques (1 à 255) -->
+          <div class="col-span-full grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <label for="input-attack" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
+              Puissance (1 à 255) *
+              <input
+                id="input-attack"
+                name="attack"
+                type="number"
+                min="1"
+                max="255"
+                placeholder="ex. 140"
+                class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
+              />
+              <span
+                data-error="attack"
+                class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"
+              ></span>
+            </label>
+
+            <label for="input-defence" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
+              Défense (1 à 255) *
+              <input
+                id="input-defence"
+                name="defence"
+                type="number"
+                min="1"
+                max="255"
+                placeholder="ex. 100"
+                class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
+              />
+              <span
+                data-error="defence"
+                class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"
+              ></span>
+            </label>
+
+            <label for="input-speed" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
+              Vitesse (1 à 255) *
+              <input
+                id="input-speed"
+                name="speed"
+                type="number"
+                min="1"
+                max="255"
+                placeholder="ex. 120"
+                class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
+              />
+              <span
+                data-error="speed"
+                class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"
+              ></span>
+            </label>
+          </div>
+
+          <!-- Description -->
+          <label for="input-description" class="flex flex-col gap-1.5 text-xs font-bold text-ink col-span-full">
+            Description *
+            <textarea
+              id="input-description"
+              name="description"
+              rows="3"
+              placeholder="Décrivez brièvement ce Digimon (10 à 200 caractères)…"
+              class="w-full rounded-xl border-2 border-line bg-surface p-3 text-sm text-ink font-normal placeholder-muted outline-none focus:ring-2 focus:ring-brand"
+            ></textarea>
+            <span
+              data-error="description"
+              class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"
+            ></span>
+          </label>
+
+          <!-- Message de succès / erreur global -->
+          <p
+            id="form-feedback"
+            aria-live="polite"
+            class="col-span-full hidden rounded-xl border px-4 py-3 text-xs sm:text-sm font-semibold"
+          ></p>
+
+          <!-- Boutons d'action -->
+          <div class="flex flex-wrap justify-end gap-3 col-span-full pt-2">
+            <button type="reset" id="btn-reset-form" class="btn-outline px-6 py-2.5 text-sm font-semibold">
+              Effacer
+            </button>
+            <button
+              type="submit"
+              id="btn-submit-creature"
+              class="btn-primary px-6 py-2.5 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Ajouter le Digimon
+            </button>
+          </div>
+        </form>
+      </section>
     </main>
     <footer class="mx-auto text-center max-w-7xl px-4 sm:px-8 pb-10 text-xs text-muted">ESSAADI CHARAF EDDINE</footer>
     <script type="module" src="js/main.js"></script>

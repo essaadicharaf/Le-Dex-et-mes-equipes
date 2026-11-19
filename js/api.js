@@ -44,3 +44,7 @@ export const getCreatures = async (params = {}) => {
 export const getCreatureById = (id) => {
   return request("GET", `/creatures/${encodeURIComponent(id)}`);
 };
+//
+export const createCreature = (creatureData) => {
+  return request("POST", "/creatures", creatureData);
+};
