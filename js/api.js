@@ -1,4 +1,5 @@
 const BASE_URL = "http://localhost:3000";
+
 export const request = async (method, route, body = null) => {
   const options = {
     method,
@@ -21,15 +22,25 @@ export const request = async (method, route, body = null) => {
     throw error;
   }
 };
+
 export const getCreatures = async (params = {}) => {
   const searchParams = new URLSearchParams();
+
   if (params.type && params.type !== "all") {
     searchParams.append("type", params.type);
   }
   if (params.q && params.q.trim() !== "") {
     searchParams.append("q", params.q.trim());
   }
+  if (params.sort) {
+    searchParams.append("_sort", params.sort);
+    searchParams.append("_order", params.order || "asc");
+  }
+
   const query = searchParams.toString();
   const route = query ? `/creatures?${query}` : "/creatures";
   return request("GET", route);
+};
+export const getCreatureById = (id) => {
+  return request("GET", `/creatures/${encodeURIComponent(id)}`);
 };
