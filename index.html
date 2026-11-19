@@ -115,6 +115,17 @@
           >
             Free
           </button>
+          <label class="flex items-center gap-2 text-xs sm:text-sm font-bold text-ink">
+            Trier par
+            <select
+              id="sort-select"
+              class="field font-normal border-2 border-line bg-surface px-3 py-2 rounded-xl text-xs sm:text-sm"
+            >
+              <option value="id-asc">Numéro (001 → 012)</option>
+              <option value="name-asc">Nom (A → Z)</option>
+              <option value="name-desc">Nom (Z → A)</option>
+            </select>
+          </label>
         </div>
       </section>
       <div class="flex flex-col lg:flex-row gap-8 items-start w-full">
