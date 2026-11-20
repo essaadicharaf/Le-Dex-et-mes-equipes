@@ -155,6 +155,19 @@
       },
       "image": "https://digimon.shadowsmith.com/img/wargreymon.jpg",
       "description": "Le guerrier ultime dragon vêtu d'une armure en métal Chrondigizoit, doté des griffes tueuses de dragons."
+    },
+    {
+      "name": "Piyomon",
+      "type": "Data",
+      "level": "Champion",
+      "image": "https://digi-api.com/images/digimon/w/Piyomon.png",
+      "description": "A Chick Digimon whose wings have developed to become like arms. It is able to dexterously operate its wings and use them to grip objects, but for that reason, it is poor at flying",
+      "stats": {
+        "attack": 111,
+        "defence": 222,
+        "speed": 125
+      },
+      "id": 13
     }
   ]
 }

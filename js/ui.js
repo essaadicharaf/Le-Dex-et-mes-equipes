@@ -126,7 +126,7 @@ export const updateCounter = (count) => {
 // ===================== DETAIL PANEL =====================
 const createStatRow = (label, value, barColorClass) => {
   const safeValue = Number(value) || 0;
-  const percent = Math.min(100, Math.round((safeValue / 999) * 100));
+  const percent = Math.min(100, Math.round((safeValue / 255) * 100));
   const row = document.createElement("div");
   row.className = "grid grid-cols-[70px_1fr_40px] items-center gap-2";
   const labelSpan = document.createElement("span");

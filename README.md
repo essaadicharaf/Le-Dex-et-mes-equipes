@@ -66,7 +66,7 @@ Le-Dex-et-mes-equipes/
 1. **Cloner le dépôt :**
 
    ```bash
-   git clone [https://github.com/essaadicharaf/Le-Dex-et-mes-equipes.git](https://github.com/essaadicharaf/Le-Dex-et-mes-equipes.git)
+   git clone git clone https://github.com/essaadicharaf/Le-Dex-et-mes-equipes.git
    cd Le-Dex-et-mes-equipes
    ```
 

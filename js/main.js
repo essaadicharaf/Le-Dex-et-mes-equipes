@@ -126,7 +126,11 @@ if (grid) {
     // delete creature from card
     const deleteCardBtn = e.target.closest('[data-action="delete-creature"]');
     if (deleteCardBtn) {
-      handleDeleteCreature(deleteCardBtn.getAttribute("data-id"), deleteCardBtn.getAttribute("data-name"));
+      handleDeleteCreature(
+        deleteCardBtn.getAttribute("data-id"),
+        deleteCardBtn.getAttribute("data-name"),
+        deleteCardBtn,
+      );
       return;
     }
     const card = e.target.closest("article");
@@ -156,7 +160,11 @@ if (detailPanel) {
     // delete creature from detail panel
     const deleteDetailBtn = e.target.closest('[data-action="delete-creature"]');
     if (deleteDetailBtn) {
-      handleDeleteCreature(deleteDetailBtn.getAttribute("data-id"), deleteDetailBtn.getAttribute("data-name"));
+      handleDeleteCreature(
+        deleteDetailBtn.getAttribute("data-id"),
+        deleteDetailBtn.getAttribute("data-name"),
+        deleteDetailBtn,
+      );
     }
   });
 }
@@ -227,27 +235,39 @@ const startEditCreature = async (creatureId) => {
   }
 };
 // confirm and delete creature with DELETE /creatures/:id
-const handleDeleteCreature = async (creatureId, creatureName = "") => {
+const handleDeleteCreature = async (creatureId, creatureName = "", triggerBtn = null) => {
   const label = creatureName ? `« ${creatureName} »` : `#${creatureId}`;
   const isConfirmed = window.confirm(`Voulez-vous vraiment supprimer le Digimon ${label} ?`);
   if (!isConfirmed) return;
+
+  if (triggerBtn) {
+    triggerBtn.disabled = true;
+    triggerBtn.textContent = "Suppression…";
+  }
+
   try {
     await deleteCreature(creatureId);
-    // reset detail panel if deleted creature was currently displayed
+
     const openedDetailBtn = detailPanel?.querySelector('[data-action="delete-creature"]');
     if (openedDetailBtn && openedDetailBtn.getAttribute("data-id") === String(creatureId)) {
       resetDetail();
     }
-    // exit edit mode if deleted creature was currently being edited
+
     if (editingCreatureId !== null && String(editingCreatureId) === String(creatureId)) {
       editingCreatureId = null;
       creatureForm?.reset();
       setFormMode(false);
     }
+
+    renderFormFeedback(`Le Digimon ${label} a été supprimé avec succès !`, "success");
     await loadCreatures();
   } catch (error) {
     console.error("Erreur suppression :", error);
-    alert("Impossible de supprimer la créature. Vérifiez que json-server est lancé.");
+    renderFormFeedback("Impossible de supprimer la créature. Vérifiez que json-server est lancé.", "error");
+    if (triggerBtn) {
+      triggerBtn.disabled = false;
+      triggerBtn.textContent = "Supprimer";
+    }
   }
 };
 if (creatureForm) {
