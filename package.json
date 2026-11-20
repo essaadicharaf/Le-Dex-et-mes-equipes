@@ -4,13 +4,14 @@
   "description": "Sprint 2 — Brief 1 : Mon Dex (starter)",
   "private": true,
   "scripts": {
-    "watch": "tailwindcss -i ./dist/input.css -o ./dist/output.css --watch",
-    "build": "tailwindcss -i ./dist/input.css -o ./dist/output.css --minify",
+    "watch": "npx @tailwindcss/cli -i ./dist/input.css -o ./dist/output.css --watch",
+    "build": "npx @tailwindcss/cli -i ./dist/input.css -o ./dist/output.css --minify",
     "api": "json-server --watch db.json --port 3000"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.3.5",
     "json-server": "^0.17.4",
-    "tailwindcss": "3.4.19"
+    "tailwindcss": "^4.3.5"
   },
   "main": "tailwind.config.js",
   "dependencies": {

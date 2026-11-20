@@ -1,4 +1,4 @@
-import { createCreature, getCreatureById, getCreatures, updateCreature } from "./api.js";
+import { createCreature, deleteCreature, getCreatureById, getCreatures, updateCreature } from "./api.js";
 import { validateCreature } from "./rules.js";
 import { clearDraft, getDraft, getSavedFilter, saveDraft, saveFilter } from "./storage.js";
 import {
@@ -28,6 +28,7 @@ let currentSearch = "";
 let currentSort = "id";
 let currentOrder = "asc";
 let editingCreatureId = null;
+let searchTimer = null;
 const updateActiveFilterUI = () => {
   allBtnFilters.forEach((btn) => {
     const btnType = btn.getAttribute("data-type") || "all";
@@ -79,18 +80,23 @@ allBtnFilters.forEach((btn) => {
 if (searchForm) {
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    clearTimeout(searchTimer);
     currentSearch = searchInput ? searchInput.value.trim() : "";
     loadCreatures();
   });
 }
 if (searchInput) {
   searchInput.addEventListener("input", () => {
-    currentSearch = searchInput.value.trim();
-    loadCreatures();
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      currentSearch = searchInput.value.trim();
+      loadCreatures();
+    }, 250);
   });
 }
 if (clearSearchBtn) {
   clearSearchBtn.addEventListener("click", () => {
+    clearTimeout(searchTimer);
     if (searchInput) searchInput.value = "";
     currentSearch = "";
     loadCreatures();
@@ -117,6 +123,12 @@ if (grid) {
       startEditCreature(editCartBtn.getAttribute("data-id"));
       return;
     }
+    // delete creature from card
+    const deleteCardBtn = e.target.closest('[data-action="delete-creature"]');
+    if (deleteCardBtn) {
+      handleDeleteCreature(deleteCardBtn.getAttribute("data-id"), deleteCardBtn.getAttribute("data-name"));
+      return;
+    }
     const card = e.target.closest("article");
     if (!card) return;
     const creatureId = card.getAttribute("data-id");
@@ -139,12 +151,19 @@ if (detailPanel) {
     const editDetailBtn = e.target.closest('[data-action="edit-creature"]');
     if (editDetailBtn) {
       startEditCreature(editDetailBtn.getAttribute("data-id"));
+      return;
+    }
+    // delete creature from detail panel
+    const deleteDetailBtn = e.target.closest('[data-action="delete-creature"]');
+    if (deleteDetailBtn) {
+      handleDeleteCreature(deleteDetailBtn.getAttribute("data-id"), deleteDetailBtn.getAttribute("data-name"));
     }
   });
 }
 updateActiveFilterUI();
 loadCreatures();
-// ===================== FORMULAIRE  =====================
+// ===================== FORMULAIRE =====================
+const createSection = document.querySelector("#create");
 const creatureForm = document.querySelector("#creature-form");
 const inputName = document.querySelector("#input-name");
 const inputType = document.querySelector("#input-type");
@@ -201,10 +220,34 @@ const startEditCreature = async (creatureId) => {
     clearFormErrors();
     renderFormFeedback();
     setFormMode(true, creature.name);
-    creatureForm?.scrollIntoView({ behavior: "smooth", block: "start" });
+    (createSection || creatureForm)?.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
     console.error("Erreur edit load :", error);
     renderFormFeedback("Impossible de charger la créature à modifier.", "error");
+  }
+};
+// confirm and delete creature with DELETE /creatures/:id
+const handleDeleteCreature = async (creatureId, creatureName = "") => {
+  const label = creatureName ? `« ${creatureName} »` : `#${creatureId}`;
+  const isConfirmed = window.confirm(`Voulez-vous vraiment supprimer le Digimon ${label} ?`);
+  if (!isConfirmed) return;
+  try {
+    await deleteCreature(creatureId);
+    // reset detail panel if deleted creature was currently displayed
+    const openedDetailBtn = detailPanel?.querySelector('[data-action="delete-creature"]');
+    if (openedDetailBtn && openedDetailBtn.getAttribute("data-id") === String(creatureId)) {
+      resetDetail();
+    }
+    // exit edit mode if deleted creature was currently being edited
+    if (editingCreatureId !== null && String(editingCreatureId) === String(creatureId)) {
+      editingCreatureId = null;
+      creatureForm?.reset();
+      setFormMode(false);
+    }
+    await loadCreatures();
+  } catch (error) {
+    console.error("Erreur suppression :", error);
+    alert("Impossible de supprimer la créature. Vérifiez que json-server est lancé.");
   }
 };
 if (creatureForm) {
@@ -264,8 +307,9 @@ if (creatureForm) {
       await loadCreatures();
       renderDetail(createdCreature);
     } catch (error) {
-      console.error("Erreur création :", error);
-      renderFormFeedback("Impossible d'ajouter la créature. Vérifiez que json-server est lancé.", "error");
+      console.error("Erreur soumission :", error);
+      const actionLabel = isEditing ? "modifier" : "ajouter";
+      renderFormFeedback(`Impossible de ${actionLabel} la créature. Vérifiez que json-server est lancé.`, "error");
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -284,4 +328,3 @@ if (creatureForm) {
     renderFormFeedback("");
   });
 }
-//

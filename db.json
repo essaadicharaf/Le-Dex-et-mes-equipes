@@ -36,7 +36,7 @@
         "defence": 80,
         "speed": 100
       },
-      "image": "https://digi-api.com/images/digimon/w/Armadimon.png",
+      "image": "https://digimon.shadowsmith.com/img/guilmon.jpg",
       "description": "Un jeune dragon de type Virus, très joueur mais doté d'une férocité cachée au combat."
     },
     {
@@ -155,32 +155,6 @@
       },
       "image": "https://digimon.shadowsmith.com/img/wargreymon.jpg",
       "description": "Le guerrier ultime dragon vêtu d'une armure en métal Chrondigizoit, doté des griffes tueuses de dragons."
-    },
-    {
-      "name": "fghjklm",
-      "type": "Data",
-      "level": "Champion",
-      "image": "https://digimon.shadowsmith.com/img/agumon.jpg",
-      "description": "dddddddddddddddddddddd",
-      "stats": {
-        "attack": 222,
-        "defence": 111,
-        "speed": 111
-      },
-      "id": 13
-    },
-    {
-      "name": "test",
-      "type": "Free",
-      "level": "Ultimate",
-      "image": "https://digimon.shadowsmith.com/img/agumon.jpg",
-      "description": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-      "stats": {
-        "attack": 777,
-        "defence": 888,
-        "speed": 999
-      },
-      "id": 14
     }
   ]
 }

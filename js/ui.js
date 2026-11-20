@@ -1,6 +1,7 @@
 const grid = document.querySelector("#grid");
 const creatureCount = document.querySelector("#creature-count");
 const detailPanel = document.querySelector("#detail");
+const FALLBACK_IMAGE = "https://digimon.shadowsmith.com/img/agumon.jpg";
 const getBadgeStyle = (type) => {
   if (type === "Data") return "border-blue-800 text-attribute-data";
   if (type === "Virus") return "border-red-800 text-attribute-virus";
@@ -13,67 +14,63 @@ const createCardElement = (creature) => {
   article.setAttribute("data-id", creature.id);
   article.className =
     "flex h-full flex-col justify-between gap-3 rounded-xl bg-surface p-3 pb-4 border-2 border-line shadow-md hover:-translate-y-1 hover:border-brand transition-all duration-200 cursor-pointer";
-
   // top part: image, title, badge, level
   const topBox = document.createElement("div");
   topBox.className = "flex flex-col gap-2";
-
   const imgBox = document.createElement("div");
   imgBox.className =
-    "relative flex h-54 w-full items-center justify-center rounded-xl bg-slate-300 border border-line/50 overflow-hidden p-1";
-
+    "relative flex h-52 w-full items-center justify-center rounded-xl bg-slate-300 border border-line/50 overflow-hidden p-1";
   const img = document.createElement("img");
   img.src = creature.image;
   img.alt = creature.name;
-  img.className = "max-h-50 w-full object-cover rounded-lg pointer-events-none";
-
+  img.className = "max-h-48 w-full object-cover rounded-lg pointer-events-none";
+  img.onerror = () => {
+    img.src = FALLBACK_IMAGE;
+  };
   const idBadge = document.createElement("span");
   idBadge.className = "absolute left-3 top-2 font-mono text-xs text-ink font-bold";
   idBadge.textContent = `#${String(creature.id).padStart(3, "0")}`;
   imgBox.append(img, idBadge);
-
   const headerRow = document.createElement("div");
   headerRow.className = "flex items-start justify-between gap-2";
-
   const title = document.createElement("h3");
   title.className = "font-display text-base font-bold text-ink leading-snug line-clamp-2";
   title.textContent = creature.name;
-
   const typeBadge = document.createElement("span");
   typeBadge.className = `shrink-0 rounded-full px-3 py-1 bg-white border ${getBadgeStyle(creature.type)} text-xs font-bold`;
   typeBadge.textContent = creature.type;
   headerRow.append(title, typeBadge);
-
   const levelText = document.createElement("p");
   levelText.className = "text-xs text-muted";
   levelText.textContent = `${creature.level} · Attaque ${creature.stats.attack}`;
-
   topBox.append(imgBox, headerRow, levelText);
-
   // bottom part: action buttons aligned at the bottom
   const bottomBox = document.createElement("div");
   bottomBox.className = "flex flex-col gap-2 pt-1";
-
   const addTeamBtn = document.createElement("button");
   addTeamBtn.type = "button";
   addTeamBtn.setAttribute("data-action", "add-team");
   addTeamBtn.setAttribute("data-id", creature.id);
   addTeamBtn.className = "btn-primary w-full py-2 text-xs font-bold";
   addTeamBtn.textContent = "Ajouter à l'équipe";
-
   const actionsRow = document.createElement("div");
   actionsRow.className = "flex gap-2";
-
   const editBtn = document.createElement("button");
   editBtn.type = "button";
   editBtn.setAttribute("data-action", "edit-creature");
   editBtn.setAttribute("data-id", creature.id);
   editBtn.className = "btn-outline flex-1 py-2 text-xs font-bold bg-white";
   editBtn.textContent = "Modifier";
-
-  actionsRow.append(editBtn);
+  const deleteBtn = document.createElement("button");
+  deleteBtn.type = "button";
+  deleteBtn.setAttribute("data-action", "delete-creature");
+  deleteBtn.setAttribute("data-id", creature.id);
+  deleteBtn.setAttribute("data-name", creature.name);
+  deleteBtn.className =
+    "btn-outline flex-1 text-xs font-bold bg-white text-attribute-virus border-attribute-virus/40 hover:bg-red-50 py-2";
+  deleteBtn.textContent = "Supprimer";
+  actionsRow.append(editBtn, deleteBtn);
   bottomBox.append(addTeamBtn, actionsRow);
-
   article.append(topBox, bottomBox);
   return article;
 };
@@ -217,6 +214,9 @@ export const renderDetail = (creature) => {
   img.src = creature.image;
   img.alt = creature.name;
   img.className = "rounded-xl h-full w-full object-cover p-1 pointer-events-none";
+  img.onerror = () => {
+    img.src = FALLBACK_IMAGE;
+  };
   imgBox.appendChild(img);
   const titleRow = document.createElement("div");
   titleRow.className = "flex items-center justify-between";
@@ -249,7 +249,7 @@ export const renderDetail = (creature) => {
   addTeamBtn.setAttribute("data-id", creature.id);
   addTeamBtn.className = "btn-primary w-full py-2.5 text-sm font-bold mt-2";
   addTeamBtn.textContent = "Ajouter à l'équipe";
-  // edit button row
+  // edit & delete button row
   const actionsRow = document.createElement("div");
   actionsRow.className = "flex gap-2";
   const editBtn = document.createElement("button");
@@ -258,7 +258,15 @@ export const renderDetail = (creature) => {
   editBtn.setAttribute("data-id", creature.id);
   editBtn.className = "btn-outline flex-1 py-2 text-xs font-bold bg-white";
   editBtn.textContent = "Modifier";
-  actionsRow.append(editBtn);
+  const deleteBtn = document.createElement("button");
+  deleteBtn.type = "button";
+  deleteBtn.setAttribute("data-action", "delete-creature");
+  deleteBtn.setAttribute("data-id", creature.id);
+  deleteBtn.setAttribute("data-name", creature.name);
+  deleteBtn.className =
+    "btn-outline flex-1 text-xs font-bold bg-white text-attribute-virus border-attribute-virus/40 hover:bg-red-50 py-2";
+  deleteBtn.textContent = "Supprimer";
+  actionsRow.append(editBtn, deleteBtn);
   detailPanel.replaceChildren(header, imgBox, titleRow, levelP, descP, statsContainer, actionsRow, addTeamBtn);
 };
 export const resetDetail = () => {
@@ -298,7 +306,8 @@ export const resetDetail = () => {
   paragraph.textContent = "Cliquez sur une carte de la grille pour afficher ses détails et ses statistiques.";
   textBox.append(heading, paragraph);
   detailPanel.replaceChildren(iconWrapper, textBox);
-}; //----    create creature  ----//
+};
+// ---- create / edit creature ---- //
 const creatureForm = document.querySelector("#creature-form");
 const formFeedback = document.querySelector("#form-feedback");
 export const renderFormErrors = (errors) => {
@@ -345,11 +354,9 @@ export const renderFormFeedback = (message = "", type = "") => {
       "col-span-full rounded-xl border border-attribute-virus bg-red-50 text-attribute-virus px-4 py-3 text-xs sm:text-sm font-semibold";
   }
 };
-//
 const formTitle = document.querySelector("#create h2");
 const formSubmitBtn = document.querySelector("#btn-submit-creature");
 const formResetBtn = document.querySelector('#creature-form button[type="reset"]');
-
 export const setFormMode = (isEditing, creatureName = "") => {
   if (formTitle) {
     formTitle.textContent = isEditing ? `Modifier « ${creatureName} »` : "Nouveau Digimon";
