@@ -3,7 +3,15 @@ const levels = ["Rookie", "Champion", "Ultimate", "Mega"];
 const isValidStat = (value) => {
   if (value === "" || value === null || value === undefined) return false;
   const num = Number(value);
-  return Number.isInteger(num) && num >= 1 && num <= 255;
+  return Number.isInteger(num) && num >= 1 && num <= 999;
+};
+const isValidHttpUrl = (value) => {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "https:" || parsed.protocol === "http:";
+  } catch {
+    return false;
+  }
 };
 export const validateCreature = (data) => {
   const errors = {};
@@ -18,17 +26,17 @@ export const validateCreature = (data) => {
     errors.level = "Veuillez choisir un niveau.";
   }
   const cleanImage = String(data.image || "").trim();
-  if (!cleanImage.startsWith("https://") && !cleanImage.startsWith("http://")) {
+  if (!isValidHttpUrl(cleanImage)) {
     errors.image = "Veuillez saisir une URL d'image valide (https://…).";
   }
   if (!isValidStat(data.stats?.attack)) {
-    errors.attack = "La puissance doit être un entier entre 1 et 255.";
+    errors.attack = "La puissance doit être un entier entre 1 et 999.";
   }
   if (!isValidStat(data.stats?.defence)) {
-    errors.defence = "La défense doit être un entier entre 1 et 255.";
+    errors.defence = "La défense doit être un entier entre 1 et 999.";
   }
   if (!isValidStat(data.stats?.speed)) {
-    errors.speed = "La vitesse doit être un entier entre 1 et 255.";
+    errors.speed = "La vitesse doit être un entier entre 1 et 999.";
   }
   const cleanDesc = String(data.description || "").trim();
   if (cleanDesc.length < 10 || cleanDesc.length > 200) {

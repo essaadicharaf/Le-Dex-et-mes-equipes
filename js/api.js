@@ -16,6 +16,7 @@ export const request = async (method, route, body = null) => {
       error.status = response.status;
       throw error;
     }
+    if (response.status === 204) return null;
     return await response.json();
   } catch (error) {
     console.error("Erreur API :", error);
@@ -41,10 +42,22 @@ export const getCreatures = async (params = {}) => {
   const route = query ? `/creatures?${query}` : "/creatures";
   return request("GET", route);
 };
+
 export const getCreatureById = (id) => {
   return request("GET", `/creatures/${encodeURIComponent(id)}`);
 };
-//
+
+// create creature POST
 export const createCreature = (creatureData) => {
   return request("POST", "/creatures", creatureData);
+};
+
+// update creature PUT
+export const updateCreature = (id, creatureData) => {
+  return request("PUT", `/creatures/${encodeURIComponent(id)}`, creatureData);
+};
+
+// delete creature DELETE
+export const deleteCreature = (id) => {
+  return request("DELETE", `/creatures/${encodeURIComponent(id)}`);
 };

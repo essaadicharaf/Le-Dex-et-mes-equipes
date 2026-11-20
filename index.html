@@ -8,7 +8,7 @@
   </head>
   <body class="bg-ground font-body text-ink min-h-screen antialiased">
     <header class="bg-[#38686A] border-b border-line text-white fixed top-0 z-40 w-full">
-      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 sm:px-8 py-4 ms:mb-5">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 sm:px-8 py-4 sm:mb-5">
         <div class="flex items-center gap-3">
           <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand text-white shadow-md">
             <svg
@@ -32,11 +32,11 @@
         </div>
         <nav
           aria-label="Navigation principale"
-          class="flex sm:flex-wrap sm:justify-end items-center gap-2 overflow-x-auto pb-1 max-w-full scrollbar-none text-xs sm:text-sm sm:"
+          class="flex sm:flex-wrap sm:justify-end items-center gap-2 overflow-x-auto pb-1 max-w-full scrollbar-none text-xs sm:text-sm"
         >
           <a
             href="#grid"
-            class="rounded-full bg-[#38686A] px-3.5 ms:px-1 py-1.5 border-2 border-solid border-brand ms:py-0.5 shrink-0 text-white hover:bg-line transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
+            class="rounded-full bg-[#38686A] px-3.5 sm:px-1 py-1.5 border-2 border-solid border-brand sm:py-0.5 shrink-0 text-white hover:bg-line transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
             >Créatures</a
           >
           <a
@@ -52,7 +52,7 @@
         </nav>
       </div>
     </header>
-    <main class="mx-auto sm:mt-[50px] flex max-w-7xl flex-col gap-8 px-4 sm:px-8 py-8">
+    <main class="mx-auto mt-28 md:mt-20 flex max-w-7xl flex-col gap-8 px-4 sm:px-8 py-8">
       <section aria-label="Recherche et filtres" class="flex flex-col gap-6">
         <div class="flex flex-wrap items-end justify-between gap-4">
           <h1 class="font-display text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">Trouver un Digimon</h1>
@@ -78,7 +78,6 @@
             </div>
           </form>
         </div>
-
         <div id="filters" role="group" aria-label="Filtrer par attribut" class="flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -136,12 +135,12 @@
             class="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
           ></section>
         </div>
-        <aside class="flex w-full lg:w-[420px] shrink-0 flex-col gap-6 rounded-xl">
+        <aside class="flex w-full lg:w-105 shrink-0 flex-col gap-6 rounded-xl">
           <!-- PANNEAU DE DÉTAIL -->
           <section
             id="detail"
             aria-label="Détail de la créature"
-            class="flex flex-col items-center justify-center text-center gap-4 rounded-xl border-2 border-dashed border-line bg-surface p-8 min-h-[360px] shadow-sm"
+            class="flex flex-col items-center justify-center text-center gap-4 rounded-xl border-2 border-dashed border-line bg-surface p-8 min-h-90 shadow-sm"
           >
             <div class="w-16 h-16 rounded-full bg-brand-light flex items-center justify-center text-brand">
               <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -161,7 +160,7 @@
             </div>
             <div>
               <h3 class="font-display text-base font-bold text-ink">Aucun Digimon sélectionné</h3>
-              <p class="text-xs text-muted m-1 max-w-[220px]">
+              <p class="text-xs text-muted m-1 max-w-55">
                 Cliquez sur une carte de la grille pour afficher ses détails et ses statistiques.
               </p>
             </div>
@@ -172,7 +171,7 @@
       <section
         id="create"
         aria-label="Nouvelle créature"
-        class="flex flex-col gap-6 rounded-xl bg-surface p-6 sm:p-8 border border-line shadow-sm"
+        class="scroll-mt-24 flex flex-col gap-6 rounded-xl bg-surface p-6 sm:p-8 border border-line shadow-sm"
       >
         <div>
           <h2 id="form-title" class="font-display text-2xl sm:text-3xl font-extrabold text-ink">Nouveau Digimon</h2>
@@ -180,7 +179,6 @@
             Chaque champ est vérifié avant l'envoi vers l'API. Votre brouillon est sauvegardé automatiquement.
           </p>
         </div>
-
         <form id="creature-form" novalidate class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
           <!-- Nom -->
           <label for="input-name" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
@@ -192,9 +190,8 @@
               placeholder="ex. Patamon"
               class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
             />
-            <span data-error="name" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
+            <span data-error="name" class="error-message text-xs font-normal text-attribute-virus min-h-4"></span>
           </label>
-
           <!-- Attribut (Type) -->
           <label for="input-type" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
             Attribut *
@@ -209,9 +206,8 @@
               <option value="Virus">Virus</option>
               <option value="Free">Free</option>
             </select>
-            <span data-error="type" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
+            <span data-error="type" class="error-message text-xs font-normal text-attribute-virus min-h-4"></span>
           </label>
-
           <!-- Niveau -->
           <label for="input-level" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
             Niveau *
@@ -226,9 +222,8 @@
               <option value="Ultimate">Ultimate</option>
               <option value="Mega">Mega</option>
             </select>
-            <span data-error="level" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
+            <span data-error="level" class="error-message text-xs font-normal text-attribute-virus min-h-4"></span>
           </label>
-
           <!-- Lien de l'image -->
           <label for="input-image" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
             Lien de l'image *
@@ -239,63 +234,50 @@
               placeholder="https://…/image.jpg"
               class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
             />
-            <span data-error="image" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
+            <span data-error="image" class="error-message text-xs font-normal text-attribute-virus min-h-4"></span>
           </label>
-
-          <!-- Statistiques (1 à 255) -->
+          <!-- Statistiques (1 à 999) -->
           <div class="col-span-full grid grid-cols-1 sm:grid-cols-3 gap-5">
             <label for="input-attack" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
-              Puissance (1 à 255) *
+              Puissance (1 à 999) *
               <input
                 id="input-attack"
                 name="attack"
                 type="number"
                 min="1"
-                max="255"
+                max="999"
                 placeholder="ex. 140"
                 class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
               />
-              <span
-                data-error="attack"
-                class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"
-              ></span>
+              <span data-error="attack" class="error-message text-xs font-normal text-attribute-virus min-h-4"></span>
             </label>
-
             <label for="input-defence" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
-              Défense (1 à 255) *
+              Défense (1 à 999) *
               <input
                 id="input-defence"
                 name="defence"
                 type="number"
                 min="1"
-                max="255"
+                max="999"
                 placeholder="ex. 100"
                 class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
               />
-              <span
-                data-error="defence"
-                class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"
-              ></span>
+              <span data-error="defence" class="error-message text-xs font-normal text-attribute-virus min-h-4"></span>
             </label>
-
             <label for="input-speed" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
-              Vitesse (1 à 255) *
+              Vitesse (1 à 999) *
               <input
                 id="input-speed"
                 name="speed"
                 type="number"
                 min="1"
-                max="255"
+                max="999"
                 placeholder="ex. 120"
                 class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
               />
-              <span
-                data-error="speed"
-                class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"
-              ></span>
+              <span data-error="speed" class="error-message text-xs font-normal text-attribute-virus min-h-4"></span>
             </label>
           </div>
-
           <!-- Description -->
           <label for="input-description" class="flex flex-col gap-1.5 text-xs font-bold text-ink col-span-full">
             Description *
@@ -308,17 +290,15 @@
             ></textarea>
             <span
               data-error="description"
-              class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"
+              class="error-message text-xs font-normal text-attribute-virus min-h-4"
             ></span>
           </label>
-
           <!-- Message de succès / erreur global -->
           <p
             id="form-feedback"
             aria-live="polite"
             class="col-span-full hidden rounded-xl border px-4 py-3 text-xs sm:text-sm font-semibold"
           ></p>
-
           <!-- Boutons d'action -->
           <div class="flex flex-wrap justify-end gap-3 col-span-full pt-2">
             <button type="reset" id="btn-reset-form" class="btn-outline px-6 py-2.5 text-sm font-semibold">
