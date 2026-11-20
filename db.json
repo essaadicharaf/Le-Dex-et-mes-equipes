@@ -168,6 +168,19 @@
         "speed": 111
       },
       "id": 13
+    },
+    {
+      "name": "test",
+      "type": "Free",
+      "level": "Ultimate",
+      "image": "https://digimon.shadowsmith.com/img/agumon.jpg",
+      "description": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "stats": {
+        "attack": 777,
+        "defence": 888,
+        "speed": 999
+      },
+      "id": 14
     }
   ]
 }

@@ -78,7 +78,6 @@
             </div>
           </form>
         </div>
-
         <div id="filters" role="group" aria-label="Filtrer par attribut" class="flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -180,7 +179,6 @@
             Chaque champ est vérifié avant l'envoi vers l'API. Votre brouillon est sauvegardé automatiquement.
           </p>
         </div>
-
         <form id="creature-form" novalidate class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
           <!-- Nom -->
           <label for="input-name" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
@@ -194,7 +192,6 @@
             />
             <span data-error="name" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
           </label>
-
           <!-- Attribut (Type) -->
           <label for="input-type" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
             Attribut *
@@ -211,7 +208,6 @@
             </select>
             <span data-error="type" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
           </label>
-
           <!-- Niveau -->
           <label for="input-level" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
             Niveau *
@@ -228,7 +224,6 @@
             </select>
             <span data-error="level" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
           </label>
-
           <!-- Lien de l'image -->
           <label for="input-image" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
             Lien de l'image *
@@ -241,17 +236,16 @@
             />
             <span data-error="image" class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"></span>
           </label>
-
-          <!-- Statistiques (1 à 255) -->
+          <!-- Statistiques (1 à 999) -->
           <div class="col-span-full grid grid-cols-1 sm:grid-cols-3 gap-5">
             <label for="input-attack" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
-              Puissance (1 à 255) *
+              Puissance (1 à 999) *
               <input
                 id="input-attack"
                 name="attack"
                 type="number"
                 min="1"
-                max="255"
+                max="999"
                 placeholder="ex. 140"
                 class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
               />
@@ -260,15 +254,14 @@
                 class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"
               ></span>
             </label>
-
             <label for="input-defence" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
-              Défense (1 à 255) *
+              Défense (1 à 999) *
               <input
                 id="input-defence"
                 name="defence"
                 type="number"
                 min="1"
-                max="255"
+                max="999"
                 placeholder="ex. 100"
                 class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
               />
@@ -277,15 +270,14 @@
                 class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"
               ></span>
             </label>
-
             <label for="input-speed" class="flex flex-col gap-1.5 text-xs font-bold text-ink">
-              Vitesse (1 à 255) *
+              Vitesse (1 à 999) *
               <input
                 id="input-speed"
                 name="speed"
                 type="number"
                 min="1"
-                max="255"
+                max="999"
                 placeholder="ex. 120"
                 class="field font-normal placeholder-muted border-2 border-line focus:outline-none focus:ring-2 focus:ring-brand"
               />
@@ -295,7 +287,6 @@
               ></span>
             </label>
           </div>
-
           <!-- Description -->
           <label for="input-description" class="flex flex-col gap-1.5 text-xs font-bold text-ink col-span-full">
             Description *
@@ -311,14 +302,12 @@
               class="error-message text-xs font-normal text-attribute-virus min-h-[16px]"
             ></span>
           </label>
-
           <!-- Message de succès / erreur global -->
           <p
             id="form-feedback"
             aria-live="polite"
             class="col-span-full hidden rounded-xl border px-4 py-3 text-xs sm:text-sm font-semibold"
           ></p>
-
           <!-- Boutons d'action -->
           <div class="flex flex-wrap justify-end gap-3 col-span-full pt-2">
             <button type="reset" id="btn-reset-form" class="btn-outline px-6 py-2.5 text-sm font-semibold">

@@ -1,22 +1,21 @@
-import { document } from "postcss/lib/postcss";
-import { getCreatures, getCreatureById, createCreature } from "./api.js";
+import { createCreature, getCreatureById, getCreatures, updateCreature } from "./api.js";
 import { validateCreature } from "./rules.js";
-import { getSavedFilter, saveFilter, getDraft, saveDraft, clearDraft } from "./storage.js";
+import { clearDraft, getDraft, getSavedFilter, saveDraft, saveFilter } from "./storage.js";
 import {
+  clearFormErrors,
+  renderDetail,
+  renderDetailError,
+  renderDetailLoading,
+  renderDetailNotFound,
+  renderFormErrors,
+  renderFormFeedback,
   renderGrid,
   renderGridError,
   renderGridLoading,
-  updateCounter,
-  renderDetail,
   resetDetail,
-  renderDetailLoading,
-  renderDetailNotFound,
-  renderDetailError,
-  renderFormErrors,
-  clearFormErrors,
-  renderFormFeedback,
+  setFormMode,
+  updateCounter,
 } from "./ui.js";
-
 const grid = document.querySelector("#grid");
 const detailPanel = document.querySelector("#detail");
 const allBtnFilters = document.querySelectorAll("#filters button");
@@ -24,12 +23,11 @@ const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search");
 const clearSearchBtn = document.querySelector("#btn-clear-search");
 const sortSelect = document.querySelector("#sort-select");
-
 let currentFilter = getSavedFilter();
 let currentSearch = "";
 let currentSort = "id";
 let currentOrder = "asc";
-
+let editingCreatureId = null;
 const updateActiveFilterUI = () => {
   allBtnFilters.forEach((btn) => {
     const btnType = btn.getAttribute("data-type") || "all";
@@ -40,7 +38,6 @@ const updateActiveFilterUI = () => {
     }
   });
 };
-
 const loadCreatures = async () => {
   renderGridLoading();
   try {
@@ -57,7 +54,6 @@ const loadCreatures = async () => {
     renderGridError();
   }
 };
-
 const openDetail = async (creatureId) => {
   renderDetailLoading();
   try {
@@ -72,7 +68,6 @@ const openDetail = async (creatureId) => {
     }
   }
 };
-
 allBtnFilters.forEach((btn) => {
   btn.addEventListener("click", () => {
     currentFilter = btn.getAttribute("data-type") || "all";
@@ -81,7 +76,6 @@ allBtnFilters.forEach((btn) => {
     loadCreatures();
   });
 });
-
 if (searchForm) {
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -89,14 +83,12 @@ if (searchForm) {
     loadCreatures();
   });
 }
-
 if (searchInput) {
   searchInput.addEventListener("input", () => {
     currentSearch = searchInput.value.trim();
     loadCreatures();
   });
 }
-
 if (clearSearchBtn) {
   clearSearchBtn.addEventListener("click", () => {
     if (searchInput) searchInput.value = "";
@@ -104,7 +96,6 @@ if (clearSearchBtn) {
     loadCreatures();
   });
 }
-
 if (sortSelect) {
   sortSelect.addEventListener("change", () => {
     const [sortField, sortOrder] = sortSelect.value.split("-");
@@ -113,40 +104,44 @@ if (sortSelect) {
     loadCreatures();
   });
 }
-
 if (grid) {
   grid.addEventListener("click", (e) => {
     if (e.target.closest("#btn-retry-grid")) {
       loadCreatures();
       return;
     }
-
     if (e.target.closest('[data-action="add-team"]')) return;
-
+    // edit creature from card
+    const editCartBtn = e.target.closest('[data-action="edit-creature"]');
+    if (editCartBtn) {
+      startEditCreature(editCartBtn.getAttribute("data-id"));
+      return;
+    }
     const card = e.target.closest("article");
     if (!card) return;
-
     const creatureId = card.getAttribute("data-id");
     openDetail(creatureId);
   });
 }
-
 if (detailPanel) {
   detailPanel.addEventListener("click", (e) => {
     if (e.target.closest("#btn-close-detail")) {
       resetDetail();
       return;
     }
-
     const retryBtn = e.target.closest("#btn-retry-detail");
     if (retryBtn) {
       const creatureId = retryBtn.getAttribute("data-id");
       openDetail(creatureId);
+      return;
+    }
+    // edit creature from detail panel
+    const editDetailBtn = e.target.closest('[data-action="edit-creature"]');
+    if (editDetailBtn) {
+      startEditCreature(editDetailBtn.getAttribute("data-id"));
     }
   });
 }
-
-
 updateActiveFilterUI();
 loadCreatures();
 // ===================== FORMULAIRE  =====================
@@ -160,8 +155,6 @@ const inputDefence = document.querySelector("#input-defence");
 const inputSpeed = document.querySelector("#input-speed");
 const inputDescription = document.querySelector("#input-description");
 const submitBtn = document.querySelector("#btn-submit-creature");
-
-
 const getFormRawValues = () => ({
   name: inputName.value,
   type: inputType.value,
@@ -172,12 +165,9 @@ const getFormRawValues = () => ({
   speed: inputSpeed.value,
   description: inputDescription.value,
 });
-
-
 const restoreDraft = () => {
   const draft = getDraft();
   if (!draft) return;
-
   inputName.value = draft.name || "";
   inputType.value = draft.type || "";
   inputLevel.value = draft.level || "";
@@ -187,29 +177,48 @@ const restoreDraft = () => {
   inputSpeed.value = draft.speed || "";
   inputDescription.value = draft.description || "";
 };
-
 const parseStat = (input) => {
   const raw = input.value.trim();
   return raw === "" ? NaN : Number(raw);
 };
-
+// fill form inputs for edit mode
+const fillFormWithCreature = (creature) => {
+  inputName.value = creature.name || "";
+  inputType.value = creature.type || "";
+  inputLevel.value = creature.level || "";
+  inputImage.value = creature.image || "";
+  inputAttack.value = creature.stats?.attack ?? "";
+  inputDefence.value = creature.stats?.defence ?? "";
+  inputSpeed.value = creature.stats?.speed ?? "";
+  inputDescription.value = creature.description || "";
+};
+// load creature and switch form to edit mode
+const startEditCreature = async (creatureId) => {
+  try {
+    const creature = await getCreatureById(creatureId);
+    editingCreatureId = creature.id;
+    fillFormWithCreature(creature);
+    clearFormErrors();
+    renderFormFeedback();
+    setFormMode(true, creature.name);
+    creatureForm?.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) {
+    console.error("Erreur edit load :", error);
+    renderFormFeedback("Impossible de charger la créature à modifier.", "error");
+  }
+};
 if (creatureForm) {
-
   restoreDraft();
-
-
   creatureForm.addEventListener("input", () => {
+    if (editingCreatureId !== null) return;
     saveDraft(getFormRawValues());
   });
-
   creatureForm.addEventListener("change", () => {
+    if (editingCreatureId !== null) return;
     saveDraft(getFormRawValues());
   });
-
-
   creatureForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const newCreature = {
       name: inputName.value.trim(),
       type: inputType.value,
@@ -222,30 +231,36 @@ if (creatureForm) {
         speed: parseStat(inputSpeed),
       },
     };
-
     const { isValid, errors } = validateCreature(newCreature);
-
     if (!isValid) {
       renderFormErrors(errors);
       renderFormFeedback("Veuillez corriger les champs invalides avant l'envoi.", "error");
       return;
     }
-
     clearFormErrors();
     renderFormFeedback("");
+    const isEditing = editingCreatureId !== null;
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.textContent = "Envoi…";
+      submitBtn.textContent = isEditing ? "Enregistrement..." : "Envoi…";
     }
-
     try {
+      if (isEditing) {
+        const updatedCreature = await updateCreature(editingCreatureId, newCreature);
+        creatureForm.reset();
+        editingCreatureId = null;
+        setFormMode(false);
+        clearFormErrors();
+        renderFormFeedback(`Le Digimon « ${updatedCreature.name} » a été modifié avec succès !`, "success");
+        await loadCreatures();
+        renderDetail(updatedCreature);
+        return;
+      }
       const createdCreature = await createCreature(newCreature);
-
       clearDraft();
       creatureForm.reset();
       clearFormErrors();
       renderFormFeedback(`Le Digimon « ${createdCreature.name} » a été ajouté avec succès !`, "success");
-
       await loadCreatures();
       renderDetail(createdCreature);
     } catch (error) {
@@ -254,14 +269,19 @@ if (creatureForm) {
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.textContent = "Ajouter le Digimon";
+        submitBtn.textContent = editingCreatureId !== null ? "Enregistrer les modifications" : "Ajouter le Digimon";
       }
     }
   });
-
   creatureForm.addEventListener("reset", () => {
-    clearDraft();
+    if (editingCreatureId !== null) {
+      editingCreatureId = null;
+      setFormMode(false);
+    } else {
+      clearDraft();
+    }
     clearFormErrors();
     renderFormFeedback("");
   });
 }
+//
